@@ -1,5 +1,7 @@
-import type { Metadata } from "next";
 import "./globals.css";
+import type { Metadata } from "next";
+import { Toaster } from "react-hot-toast";
+import { ClerkProvider } from "@clerk/nextjs";
 
 export const metadata: Metadata = {
   title: "Learn Sup",
@@ -12,9 +14,19 @@ const RootLayout = ({
   children: React.ReactNode;
 }>) => {
   return (
-    <html lang="en">
-      <body>{children}</body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <body>
+          {children}
+          <Toaster
+            position="top-center"
+            toastOptions={{
+              duration: 4000,
+            }}
+          />
+        </body>
+      </html>
+    </ClerkProvider>
   );
 };
 
