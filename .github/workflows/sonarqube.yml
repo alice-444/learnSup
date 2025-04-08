@@ -1,34 +1,50 @@
-name: Analyse SonarQube
+name: Coverage & Quality Report ✅
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+      - feat/*
   pull_request:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
-  sonarqube:
-    name: Analyse de code avec SonarQube
+  coverage:
+    name: Code Coverage
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v3
-
-      - name: Set up Java
-        uses: actions/setup-java@v3
+      - uses: actions/checkout@v2
         with:
-          java-version: "17"
-          distribution: "temurin"
-
-      - name: Cache SonarQube packages
-        uses: actions/cache@v3
-        with:
-          path: ~/.sonar/cache
-          key: ${{ runner.os }}-sonar
-
-      - name: SonarQube Scan
+          fetch-depth: 0
+      - uses: sonarsource/sonarqube-scan-action@master
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  code_quality:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install Docker
         run: |
-          ./gradlew sonarqube \
-            -Dsonar.login=$SONAR_TOKEN
+          curl -fsSL https://get.docker.com -o get-docker.sh
+          sudo sh get-docker.sh
+
+      - name: Create directory for code quality results
+        run: mkdir codequality-results
+
+      - name: Run Code Climate analysis
+        run: |
+          docker run \
+            --env CODECLIMATE_CODE="$PWD" \
+            --volume "$PWD":/code \
+            --volume /var/run/docker.sock:/var/run/docker.sock \
+            --volume /tmp/cc:/tmp/cc \
+            codeclimate/codeclimate analyze -f html > ./codequality-results/index.html
+
+      - name: Upload Code Quality Report as Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: codequality-results
+          path: codequality-results/
