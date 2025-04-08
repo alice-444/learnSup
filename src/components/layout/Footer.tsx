@@ -1,5 +1,7 @@
+"use client";
+
 import Link from "next/link";
-import { BsTwitterX } from "react-icons/bs";
+import Image from "next/image";
 import { FaInstagram, FaLinkedin, FaTiktok } from "react-icons/fa";
 
 const Footer = () => {
@@ -31,17 +33,24 @@ const Footer = () => {
 
   const socialLinks = [
     { icon: <FaInstagram />, href: "#", label: "Instagram" },
-    { icon: <BsTwitterX />, href: "#", label: "X" },
     { icon: <FaTiktok />, href: "#", label: "TikTok" },
     { icon: <FaLinkedin />, href: "#", label: "LinkedIn" },
   ];
 
   return (
-    <footer className="bg-gray-800 text-white mt-auto relative">
+    <footer className="bg-gray-700 text-white mt-auto relative">
       <div className="container mx-auto px-4 py-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div className="md:col-span-1">
-            <h3 className="text-2xl font-bold mb-4">LearnSup</h3>
+            <Link href="/" className="flex items-center mb-4">
+              <Image
+                src="/logo/logo2.png"
+                alt="Logo"
+                width={160}
+                height={64}
+                className="h-28 w-auto mr-2"
+              />
+            </Link>
             <p className="text-gray-400">
               Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam,
               ducimus!
@@ -69,7 +78,7 @@ const Footer = () => {
           ))}
 
           <div className="space-y-2">
-            <h4 className="text-lg font-semibold">Réseaux sociaux</h4>
+            <h4 className="text-lg font-semibold">Social networks</h4>
             <div className="flex space-x-4">
               {socialLinks.map((social, index) => (
                 <Link
@@ -86,7 +95,7 @@ const Footer = () => {
         </div>
 
         <div className="mt-8 pt-8 border-t border-gray-700 text-center text-gray-400">
-          <p>&copy; {currentYear} LearnSup. Tous droits réservés.</p>
+          <p>&copy; {currentYear} LearnSup. All rights reserved.</p>
           <p className="mt-1 text-sm">Made with ❤️ </p>
         </div>
       </div>

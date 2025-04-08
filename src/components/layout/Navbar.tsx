@@ -2,99 +2,145 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { FiMenu, FiX, FiUser } from "react-icons/fi";
+import { usePathname } from "next/navigation";
+import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect, useMemo, useCallback } from "react";
+import { FiMenu, FiX, FiUser, FiBell } from "react-icons/fi";
+import { NavItem, NavLinkProps, NavLinksProps } from "@/lib/types";
 import { UserButton, SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
 
-const navItems = [
-  { name: "Home", minWidth: 640, path: "/" },
-  { name: "Title", minWidth: 768, path: "/" },
-  { name: "Title", minWidth: 768, path: "/" },
+const navItemsConnected: NavItem[] = [
+  { name: "Home", minWidth: 768, path: "/home" },
+  { name: "Dashboard", minWidth: 768, path: "/dashboard" },
+  { name: "Messages", minWidth: 768, path: "/messages" },
+  { name: "Planning", minWidth: 768, path: "/planning" },
+  { name: "Relationship", minWidth: 768, path: "/relationship" },
 ];
 
-function useWindowWidth() {
-  const [windowWidth, setWindowWidth] = useState(0);
-
+function useWindowWidth(): number {
+  const [windowWidth, setWindowWidth] = useState<number>(0);
   useEffect(() => {
     const handleResize = () => setWindowWidth(window.innerWidth);
     handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
-
   return windowWidth;
 }
 
+const NavLink = ({ item, onClick, variant = "desktop" }: NavLinkProps) => {
+  const pathname = usePathname();
+  const isActive = pathname === item.path;
+
+  const baseClassDesktop =
+    "min-w-[80px] flex items-center justify-center w-full px-2 py-1 sm:px-3 sm:py-2 text-xs sm:text-sm md:text-base transition-colors";
+  const activeClassDesktop = "text-red-500 font-medium";
+  const inactiveClassDesktop = "text-gray-900 hover:text-red-400";
+
+  const baseClassMobile =
+    "w-full flex items-center px-4 py-3 rounded-lg transition-colors";
+  const activeClassMobile = "bg-red-600/10 text-[#D90429]";
+  const inactiveClassMobile = "text-gray-700 hover:bg-gray-200";
+
+  const baseClass = variant === "desktop" ? baseClassDesktop : baseClassMobile;
+  const activeClass =
+    variant === "desktop" ? activeClassDesktop : activeClassMobile;
+  const inactiveClass =
+    variant === "desktop" ? inactiveClassDesktop : inactiveClassMobile;
+
+  return (
+    <motion.div
+      className="relative flex-shrink-0"
+      whileHover={{ scale: 1.05 }}
+      transition={{ type: "spring", stiffness: 300 }}
+    >
+      <Link
+        href={item.path}
+        onClick={onClick}
+        className={`${baseClass} ${isActive ? activeClass : inactiveClass}`}
+      >
+        <span
+          className={
+            variant === "desktop" ? "whitespace-nowrap" : "text-lg sm:text-base"
+          }
+        >
+          {item.name}
+        </span>
+      </Link>
+      {variant === "desktop" && isActive && (
+        <motion.div
+          className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#D90429]"
+          layoutId="activeIndicator"
+          transition={{ type: "spring", stiffness: 300 }}
+        />
+      )}
+    </motion.div>
+  );
+};
+
+const NavLinks = ({ items, onClick, variant }: NavLinksProps) => (
+  <>
+    {items.map((item) => (
+      <NavLink
+        key={item.name}
+        item={item}
+        onClick={onClick}
+        variant={variant}
+      />
+    ))}
+  </>
+);
+
 const Navbar = () => {
-  const [activeTab, setActiveTab] = useState(navItems[0].name);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
   const windowWidth = useWindowWidth();
 
-  const visibleItems = useMemo(
-    () => navItems.filter((item) => windowWidth >= item.minWidth),
+  const visibleItemsConnectedDesktop = useMemo(
+    () => navItemsConnected.filter((item) => windowWidth >= item.minWidth),
     [windowWidth]
   );
+  const visibleItemsConnectedMobile = navItemsConnected;
 
-  const handleTabClick = useCallback(
-    (name: string) => {
-      setActiveTab(name);
-      if (isMenuOpen) {
-        setIsMenuOpen(false);
-      }
-    },
-    [isMenuOpen]
-  );
+  const handleLinkClick = () => {
+    if (isMenuOpen) {
+      setIsMenuOpen(false);
+    }
+  };
 
   return (
     <nav className="fixed top-0 w-full bg-[#EDF2F4]/70 backdrop-blur-md border-[#EDF2F4] z-50">
       <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center gap-2">
-            <Image
-              src="/logo.png"
-              alt="Logo"
-              width={160}
-              height={64}
-              priority
-              className="h-16 w-auto object-contain"
-            />
+            <Link href="/" className="flex items-center mb-4">
+              <Image
+                src="/logo/logo2.png"
+                alt="Logo"
+                width={160}
+                height={64}
+                priority
+                className="h-24 w-auto object-contain"
+              />
+            </Link>
           </div>
 
           <div className="hidden md:flex flex-1 justify-center overflow-hidden">
             <div className="flex items-center gap-1 sm:gap-2 md:gap-3 lg:gap-4 xl:gap-5">
-              {visibleItems.map((item) => (
-                <motion.div
-                  key={item.name}
-                  className="relative flex-shrink-0"
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ type: "spring", stiffness: 300 }}
-                >
-                  <Link
-                    href={item.path}
-                    onClick={() => setActiveTab(item.name)}
-                    className={`min-w-[80px] flex items-center justify-center w-full px-2 py-1 sm:px-3 sm:py-2 text-xs sm:text-sm md:text-base transition-colors ${
-                      activeTab === item.name
-                        ? "text-red-500 font-medium"
-                        : "text-gray-900 hover:text-red-400"
-                    }`}
-                  >
-                    <span className="whitespace-nowrap">{item.name}</span>
-                  </Link>
-                  {activeTab === item.name && (
-                    <motion.div
-                      className="absolute bottom-0 left-0 right-0 h-[2px] bg-[#D90429]"
-                      layoutId="activeIndicator"
-                      transition={{ type: "spring", stiffness: 300 }}
-                    />
-                  )}
-                </motion.div>
-              ))}
+              <SignedIn>
+                <NavLinks
+                  items={visibleItemsConnectedDesktop}
+                  onClick={handleLinkClick}
+                  variant="desktop"
+                />
+              </SignedIn>
             </div>
           </div>
 
           <div className="flex items-center gap-2 sm:gap-4">
             <SignedIn>
+              <button className="p-2 text-gray-600 hover:text-[#EF233C]">
+                <FiBell className="h-6 w-6" />
+              </button>
               <UserButton />
             </SignedIn>
             <SignedOut>
@@ -104,7 +150,6 @@ const Navbar = () => {
                 </button>
               </SignInButton>
             </SignedOut>
-
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className="md:hidden p-2 text-gray-600 hover:text-[#EF233C]"
@@ -128,21 +173,13 @@ const Navbar = () => {
               className="md:hidden overflow-hidden"
             >
               <div className="px-2 pb-4 space-y-1">
-                {navItems.map((item) => (
-                  <Link href={item.path} passHref key={item.name}>
-                    <motion.a
-                      onClick={() => handleTabClick(item.name)}
-                      whileTap={{ scale: 0.97 }}
-                      className={`w-full flex items-center px-4 py-3 rounded-lg transition-colors ${
-                        activeTab === item.name
-                          ? "bg-red-600/10 text-[#D90429]"
-                          : "text-gray-700 hover:bg-gray-200"
-                      }`}
-                    >
-                      <span className="text-lg sm:text-base">{item.name}</span>
-                    </motion.a>
-                  </Link>
-                ))}
+                <SignedIn>
+                  <NavLinks
+                    items={visibleItemsConnectedMobile}
+                    onClick={handleLinkClick}
+                    variant="mobile"
+                  />
+                </SignedIn>
                 <div className="pt-4 border-t border-gray-200">
                   <SignedIn>
                     <UserButton />
