@@ -1,5 +1,6 @@
 import "./globals.css";
 import type { Metadata } from "next";
+import { Inter } from "next/font/google";
 import { Toaster } from "react-hot-toast";
 import { ClerkProvider } from "@clerk/nextjs";
 import Navbar from "@/components/layout/Navbar";
@@ -15,6 +16,13 @@ export const metadata: Metadata = {
   },
 };
 
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-rajdhani",
+  display: "swap",
+});
+
 const RootLayout = ({
   children,
 }: Readonly<{
@@ -22,7 +30,7 @@ const RootLayout = ({
 }>) => {
   return (
     <ClerkProvider>
-      <html lang="en">
+      <html lang="en" className={`${inter.className} h-full`}>
         <body>
           <Navbar />
           {children}

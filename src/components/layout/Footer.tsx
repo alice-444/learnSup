@@ -96,7 +96,6 @@ const Footer = () => {
 
         <div className="mt-8 pt-8 border-t border-gray-700 text-center text-gray-400">
           <p>&copy; {currentYear} LearnSup. All rights reserved.</p>
-          <p className="mt-1 text-sm">Made with ❤️ </p>
         </div>
       </div>
     </footer>
