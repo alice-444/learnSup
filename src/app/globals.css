@@ -42,6 +42,9 @@
 }
 
 :root {
+  --primary-blue: #9DCDEB;
+  --secondary-blue: #4A90E2;
+  --secondary-white: #f7f7f7;
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
