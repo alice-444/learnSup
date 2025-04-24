@@ -3,18 +3,19 @@ export interface NavItem {
   name: string;
   minWidth: number;
   path: string;
+  icon?: React.ReactNode;
 }
 
 export interface NavLinkProps {
   item: NavItem;
   onClick?: () => void;
-  variant?: "desktop" | "mobile" | "tablet";
+  variant?: "desktop" | "tablet" | "mobile";
 }
 
 export interface NavLinksProps {
   items: NavItem[];
+  variant?: "desktop" | "tablet" | "mobile";
   onClick?: () => void;
-  variant: "desktop" | "mobile" | "tablet";
 }
 
 //page messages

@@ -14,6 +14,8 @@ import {
   FiImage,
   FiChevronLeft,
   FiChevronRight,
+  FiVideo,
+  FiMoreVertical,
 } from "react-icons/fi";
 import { Conversation, Message } from "@/lib/types";
 
@@ -177,7 +179,7 @@ const Messages = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col py-18">
+    <div className="min-h-screen flex flex-col bg-[#1B2559]">
       <div className="flex-1 flex relative">
         <motion.aside
           initial={false}
@@ -190,22 +192,56 @@ const Messages = () => {
             stiffness: 300,
             damping: 30,
           }}
-          className="h-full bg-[#2D3250]/70 backdrop-blur-md border-r border-gray-200/20 overflow-hidden flex-shrink-0"
+          className="h-full bg-white/5 backdrop-blur-md border-r border-white/10 overflow-hidden flex-shrink-0"
         >
           <div className="w-[350px] h-full">
-            <div className="p-4">
-              <h1 className="text-xl font-semibold text-white mb-6">
-                Discussions
-              </h1>
-              <div className="relative mb-6">
-                <Input
-                  type="search"
-                  placeholder="Rechercher une discussion"
-                  className="w-full bg-white/10 border-0 text-white placeholder:text-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0"
-                />
-                <FiSearch className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <div className="p-0">
+              <div className="px-4 pt-4">
+                <h1 className="text-2xl font-semibold text-white mb-6">
+                  Discussions
+                </h1>
               </div>
-              <div className="space-y-2 max-h-[calc(100vh-16rem)] overflow-y-auto custom-scrollbar">
+              <div className="px-4 mb-6">
+                <div className="relative">
+                  <Input
+                    type="search"
+                    placeholder="Rechercher une discussion"
+                    className="w-full bg-white/5 border-0 text-white placeholder:text-gray-400 focus-visible:ring-0 focus-visible:ring-offset-0 rounded-full"
+                  />
+                  <FiSearch className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 w-4 h-4" />
+                </div>
+              </div>
+              <div className="px-4 mb-4">
+                <div className="flex gap-2">
+                  <Button
+                    variant="ghost"
+                    className={`flex-1 text-sm rounded-full px-4 py-2 h-auto ${
+                      true ? "bg-white/10 text-white" : "text-gray-400"
+                    }`}
+                  >
+                    Tout
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    className="flex-1 text-sm text-gray-400 rounded-full px-4 py-2 h-auto hover:bg-white/5 hover:text-white"
+                  >
+                    Non lues
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    className="flex-1 text-sm text-gray-400 rounded-full px-4 py-2 h-auto hover:bg-white/5 hover:text-white"
+                  >
+                    Favoris
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    className="flex-1 text-sm text-gray-400 rounded-full px-4 py-2 h-auto hover:bg-white/5 hover:text-white"
+                  >
+                    Groupes
+                  </Button>
+                </div>
+              </div>
+              <div className="space-y-0 max-h-[calc(100vh-12rem)] overflow-y-auto custom-scrollbar">
                 {conversations.map((conversation) => (
                   <motion.div
                     key={conversation.id}
@@ -214,10 +250,10 @@ const Messages = () => {
                     onClick={() => setSelectedConversation(conversation.id)}
                   >
                     <div
-                      className={`p-3 rounded-lg cursor-pointer transition-all flex items-center gap-3 ${
+                      className={`px-4 py-3 cursor-pointer transition-all flex items-center gap-3 ${
                         selectedConversation === conversation.id
-                          ? "bg-white/20"
-                          : "hover:bg-white/10"
+                          ? "bg-white/10"
+                          : "hover:bg-white/5"
                       }`}
                     >
                       <div className="relative flex-shrink-0">
@@ -231,26 +267,35 @@ const Messages = () => {
                         )}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-medium text-white truncate">
-                          {conversation.name}
-                        </h3>
-                        <p className="text-sm text-gray-300 truncate">
-                          {conversation.typing ? (
-                            <span className="text-blue-400">
-                              Est en train d&apos;écrire...
+                        <div className="flex items-center justify-between">
+                          <h3 className="font-medium text-white truncate">
+                            {conversation.name}
+                          </h3>
+                          {conversation.messages.length > 0 && (
+                            <span className="text-xs text-gray-400">
+                              {formatTime(conversation.messages[conversation.messages.length - 1].timestamp)}
                             </span>
-                          ) : (
-                            conversation.lastMessage
                           )}
-                        </p>
-                      </div>
-                      {conversation.unread > 0 && (
-                        <div className="w-5 h-5 bg-[#D90429] rounded-full flex items-center justify-center flex-shrink-0">
-                          <span className="text-xs text-white font-medium">
-                            {conversation.unread}
-                          </span>
                         </div>
-                      )}
+                        <div className="flex items-center justify-between mt-1">
+                          <p className="text-sm text-gray-300 truncate flex-1">
+                            {conversation.typing ? (
+                              <span className="text-blue-400">
+                                Est en train d&apos;écrire...
+                              </span>
+                            ) : (
+                              conversation.lastMessage
+                            )}
+                          </p>
+                          {conversation.unread > 0 && (
+                            <div className="ml-2 w-5 h-5 bg-[#D90429] rounded-full flex items-center justify-center flex-shrink-0">
+                              <span className="text-xs text-white font-medium">
+                                {conversation.unread}
+                              </span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
                     </div>
                   </motion.div>
                 ))}
@@ -270,7 +315,7 @@ const Messages = () => {
             damping: 30,
           }}
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-          className="absolute top-1/2 -translate-y-1/2 z-20 bg-[#2D3250]/70 backdrop-blur-md text-white hover:bg-[#2D3250] hover:text-white rounded-full w-8 h-8 flex items-center justify-center shadow-lg border border-gray-200/20"
+          className="absolute top-1/2 -translate-y-1/2 z-20 bg-white/5 backdrop-blur-md text-white hover:bg-white/10 hover:text-white rounded-full w-8 h-8 flex items-center justify-center shadow-lg border border-white/10"
         >
           {isSidebarOpen ? (
             <FiChevronLeft className="h-4 w-4" />
@@ -279,32 +324,50 @@ const Messages = () => {
           )}
         </motion.button>
 
-        <div className="flex-1 flex flex-col bg-[#1B2559] bg-opacity-95">
+        <div className="flex-1 flex flex-col">
           {selectedConversation ? (
             <>
-              <div className="p-4 bg-[#2D3250]/70 backdrop-blur-md border-b border-gray-200/20">
-                <div className="flex items-center gap-3">
-                  <img
-                    src={
-                      conversations.find((c) => c.id === selectedConversation)
-                        ?.avatar
-                    }
-                    alt="Avatar"
-                    className="w-10 h-10 rounded-full object-cover"
-                  />
-                  <div className="flex-1">
-                    <h2 className="font-semibold text-gray-900">
-                      {
+              <div className="p-4 bg-white/5 backdrop-blur-md border-b border-white/10">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <img
+                      src={
                         conversations.find((c) => c.id === selectedConversation)
-                          ?.name
+                          ?.avatar
                       }
-                    </h2>
-                    <p className="text-sm text-gray-500">
-                      {conversations.find((c) => c.id === selectedConversation)
-                        ?.online
-                        ? "En ligne"
-                        : "Hors ligne"}
-                    </p>
+                      alt="Avatar"
+                      className="w-10 h-10 rounded-full object-cover"
+                    />
+                    <div>
+                      <h2 className="font-semibold text-white">
+                        {
+                          conversations.find((c) => c.id === selectedConversation)
+                            ?.name
+                        }
+                      </h2>
+                      <p className="text-sm text-gray-400">
+                        {conversations.find((c) => c.id === selectedConversation)
+                          ?.online
+                          ? "En ligne"
+                          : "Hors ligne"}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="text-gray-400 hover:text-white hover:bg-white/10"
+                    >
+                      <FiVideo className="h-5 w-5" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="text-gray-400 hover:text-white hover:bg-white/10"
+                    >
+                      <FiMoreVertical className="h-5 w-5" />
+                    </Button>
                   </div>
                 </div>
               </div>
@@ -333,10 +396,21 @@ const Messages = () => {
                             message.sender === "user"
                               ? "justify-end"
                               : "justify-start"
-                          }`}
+                          } items-end gap-2`}
                         >
+                          {message.sender !== "user" && (
+                            <img
+                              src={
+                                conversations.find(
+                                  (c) => c.id === selectedConversation
+                                )?.avatar
+                              }
+                              alt="Avatar"
+                              className="w-6 h-6 rounded-full object-cover"
+                            />
+                          )}
                           <div
-                            className={`group relative max-w-[85%] md:max-w-[70%] rounded-lg p-3 ${
+                            className={`group relative max-w-[85%] md:max-w-[70%] rounded-2xl p-3 ${
                               message.sender === "user"
                                 ? "bg-[#D97706] text-white rounded-br-none"
                                 : "bg-[#2D3250]/70 backdrop-blur-sm text-white rounded-bl-none"
@@ -376,6 +450,13 @@ const Messages = () => {
                               )}
                             </div>
                           </div>
+                          {message.sender === "user" && (
+                            <img
+                              src="/avatars/user.jpg"
+                              alt="User Avatar"
+                              className="w-6 h-6 rounded-full object-cover"
+                            />
+                          )}
                         </motion.div>
                       </>
                     </AnimatePresence>
@@ -412,13 +493,13 @@ const Messages = () => {
                       value={messageInput}
                       onChange={(e) => setMessageInput(e.target.value)}
                       onKeyDown={handleKeyPress}
-                      className="w-full bg-white/10 border-0 text-white placeholder:text-gray-400 focus-visible:ring-1 focus-visible:ring-white/20"
+                      className="w-full bg-white/10 border-0 text-white placeholder:text-gray-400 focus-visible:ring-1 focus-visible:ring-white/20 rounded-full"
                     />
                   </div>
                   <Button
                     onClick={handleSendMessage}
                     disabled={!messageInput.trim()}
-                    className="bg-[#D97706] hover:bg-[#D97706]/90 text-white"
+                    className="bg-[#D97706] hover:bg-[#D97706]/90 text-white rounded-full"
                   >
                     <FiSend className="h-4 w-4 mr-2" />
                     <span className="hidden sm:inline">Envoyer</span>
