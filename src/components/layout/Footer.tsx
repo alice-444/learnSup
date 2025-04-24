@@ -10,13 +10,18 @@ const Footer = () => {
 
   const navigationLinks = [
     { name: "Accueil", href: "/" },
-    { name: "Dashboard", href: "/" },
     { name: "Ateliers", href: "/" },
+    { name: "Dashboard", href: "/" },
     { name: "Messages", href: "/" },
+    { name: "Relations", href: "/" },
     { name: "Profil", href: "/" },
   ];
 
   const legalLinks = [
+    {
+      name: "F.A.Q.",
+      href: "/faq",
+    },
     {
       name: "Conditions d'utilisation générales",
       href: "/conditions",
@@ -83,13 +88,13 @@ const Footer = () => {
 
   return (
     <footer className="bg-[#101113] text-white">
-      <div className="container mx-auto px-4 md:px-6">
+      <div className="container mx-auto px-4 md:px-6 py-8">
         <div className="flex flex-col md:flex-row md:justify-between items-center">
           <div className="flex flex-col items-center md:items-start space-y-2">
-            <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-6">
               <Link href="/">
                 <Image
-                  src="/logo/logo2.png"
+                  src="/logo/LogoBlanc.svg"
                   alt="LearnSup"
                   width={220}
                   height={124}

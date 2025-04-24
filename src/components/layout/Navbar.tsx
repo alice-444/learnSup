@@ -13,7 +13,7 @@ import { usePathname } from "next/navigation";
 import { MdOutlineLanguage } from "react-icons/md";
 import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { NavItem, NavLinkProps, NavLinksProps } from "@/lib/types";
+import { IconButtonProps, NavItem } from "@/lib/types";
 import {
   FiUser,
   FiBell,
@@ -21,7 +21,9 @@ import {
   FiBook,
   FiGrid,
   FiMessageSquare,
+  FiUsers,
 } from "react-icons/fi";
+import { X, Menu } from "lucide-react";
 
 const TABLET_BREAKPOINT = 768;
 const DESKTOP_BREAKPOINT = 1024;
@@ -30,7 +32,7 @@ const navItemsConnected: NavItem[] = [
   {
     name: "Accueil",
     minWidth: 640,
-    path: "/",
+    path: "/search",
     icon: <FiHome className="w-5 h-5" />,
   },
   {
@@ -51,6 +53,12 @@ const navItemsConnected: NavItem[] = [
     path: "/messages",
     icon: <FiMessageSquare className="w-5 h-5" />,
   },
+  {
+    name: "Relations",
+    minWidth: 768,
+    path: "/relations",
+    icon: <FiUsers className="w-5 h-5" />,
+  },
 ];
 
 function useWindowWidth(): number {
@@ -64,7 +72,15 @@ function useWindowWidth(): number {
   return windowWidth;
 }
 
-const NavLink = ({ item, onClick, variant = "desktop" }: NavLinkProps) => {
+const NavLink = ({
+  item,
+  onClick,
+  variant = "desktop",
+}: {
+  item: NavItem;
+  onClick?: () => void;
+  variant?: "desktop" | "tablet" | "mobile";
+}) => {
   const pathname = usePathname();
   const isActive = pathname === item.path;
 
@@ -73,7 +89,7 @@ const NavLink = ({ item, onClick, variant = "desktop" }: NavLinkProps) => {
   const baseClassTablet =
     "px-3 py-1.5 text-sm font-medium transition-colors relative";
   const baseClassMobile =
-    "w-full px-4 py-3.5 flex items-center gap-3 text-[15px] font-medium transition-all rounded-xl hover:bg-white/35";
+    "w-full px-4 py-3.5 flex items-center gap-3 text-[15px] font-medium transition-all rounded-full hover:bg-white/35";
 
   const activeClass = "text-white";
   const inactiveClass = "text-white/80 hover:text-white";
@@ -104,7 +120,7 @@ const NavLink = ({ item, onClick, variant = "desktop" }: NavLinkProps) => {
             <span>{item.name}</span>
             {isActive && (
               <motion.div
-                className="absolute inset-0 bg-white/10 rounded-xl"
+                className="absolute inset-0 bg-white/10 rounded-full"
                 layoutId="activeBackgroundMobile"
                 transition={{
                   type: "spring",
@@ -136,7 +152,15 @@ const NavLink = ({ item, onClick, variant = "desktop" }: NavLinkProps) => {
   );
 };
 
-const NavLinks = ({ items, variant, onClick }: NavLinksProps) => {
+const NavLinks = ({
+  items,
+  variant,
+  onClick,
+}: {
+  items: NavItem[];
+  variant?: "desktop" | "tablet" | "mobile";
+  onClick?: () => void;
+}) => {
   return (
     <>
       {items.map((item) => (
@@ -148,6 +172,29 @@ const NavLinks = ({ items, variant, onClick }: NavLinksProps) => {
         />
       ))}
     </>
+  );
+};
+
+const IconButton: React.FC<IconButtonProps> = ({
+  children,
+  onClick,
+  className = "",
+}) => {
+  return (
+    <motion.button
+      onClick={onClick}
+      className={`relative p-2 text-white/80 hover:text-white transition-colors group rounded-full ${className}`}
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+    >
+      <motion.div
+        className="absolute inset-0 bg-white/10 rounded-full"
+        initial={{ opacity: 0, scale: 0.8 }}
+        whileHover={{ opacity: 1, scale: 1 }}
+        transition={{ type: "spring", stiffness: 400, damping: 17 }}
+      />
+      <div className="relative">{children}</div>
+    </motion.button>
   );
 };
 
@@ -171,17 +218,23 @@ const Navbar = () => {
     [windowWidth, isTablet]
   );
 
+  useEffect(() => {
+    if (windowWidth >= DESKTOP_BREAKPOINT) {
+      setIsMenuOpen(false);
+    }
+  }, [windowWidth]);
+
   return (
-    <nav className="fixed top-0 w-full bg-[var(--primary-blue)] z-50">
+    <nav className="fixed top-0 w-full bg-[var(--secondary-blue)] z-50">
       <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <div className="flex items-center flex-1">
             <Link href="/" className="flex items-center">
               <Image
-                src="/logo/logo2.png"
+                src="/logo/LogoBlanc.svg"
                 alt="Logo"
-                width={isTablet ? 120 : 160}
-                height={isTablet ? 48 : 64}
+                width={isTablet ? 150 : 190}
+                height={isTablet ? 78 : 94}
                 className="h-auto object-contain transition-all duration-300"
                 priority
               />
@@ -269,67 +322,30 @@ const Navbar = () => {
               )}
             </SignedIn>
 
+            <SignedOut>
+              <SignInButton mode="modal">
+                <motion.button
+                  className="flex items-center justify-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm hover:bg-white/30 transition-all"
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                >
+                  <FiUser className="h-5 w-5" />
+                  <span className="text-sm font-medium">Se connecter</span>
+                </motion.button>
+              </SignInButton>
+            </SignedOut>
+
             {windowWidth < DESKTOP_BREAKPOINT && (
-              <motion.button
+              <IconButton
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="relative p-2 text-white/80 hover:text-white transition-colors group rounded-full"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                className="lg:hidden"
               >
-                <motion.div
-                  className="absolute inset-0 bg-white/10 rounded-full"
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  whileHover={{ opacity: 1, scale: 1 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                />
-                <div className="relative h-6 w-6">
-                  <motion.span
-                    className="absolute top-[6px] left-[4px] right-[4px] h-[2px] bg-current rounded-full origin-center"
-                    animate={
-                      isMenuOpen
-                        ? {
-                            rotate: 45,
-                            y: 6,
-                          }
-                        : {
-                            rotate: 0,
-                            y: 0,
-                          }
-                    }
-                    transition={{ duration: 0.2 }}
-                  />
-                  <motion.span
-                    className="absolute top-[13px] left-[4px] right-[4px] h-[2px] bg-current rounded-full"
-                    animate={
-                      isMenuOpen
-                        ? {
-                            opacity: 0,
-                            x: -8,
-                          }
-                        : {
-                            opacity: 1,
-                            x: 0,
-                          }
-                    }
-                    transition={{ duration: 0.2 }}
-                  />
-                  <motion.span
-                    className="absolute top-[20px] left-[4px] right-[4px] h-[2px] bg-current rounded-full origin-center"
-                    animate={
-                      isMenuOpen
-                        ? {
-                            rotate: -45,
-                            y: -6,
-                          }
-                        : {
-                            rotate: 0,
-                            y: 0,
-                          }
-                    }
-                    transition={{ duration: 0.2 }}
-                  />
-                </div>
-              </motion.button>
+                {isMenuOpen ? (
+                  <X className="w-6 h-6" />
+                ) : (
+                  <Menu className="w-6 h-6" />
+                )}
+              </IconButton>
             )}
           </div>
         </div>
@@ -358,7 +374,7 @@ const Navbar = () => {
                   mass: 0.8,
                 },
               }}
-              className="md:hidden fixed top-16 left-0 right-0 bg-gradient-to-b from-[var(--primary-blue)] via-[var(--primary-blue)]/98 to-[var(--primary-blue)]/95 backdrop-blur-md border-b border-white/30 shadow-2xl"
+              className="md:hidden fixed top-16 left-0 right-0 bg-gradient-to-b from-[var(--secondary-blue)] via-[var(--secondary-blue)]/98 to-[var(--secondary-blue)]/95 backdrop-blur-md border-b border-white/30 shadow-2xl"
             >
               <motion.div
                 className="max-w-8xl mx-auto"
@@ -440,7 +456,7 @@ const Navbar = () => {
                       className="mt-6 pt-6 border-t border-white/35"
                     >
                       <motion.div
-                        className="flex items-center gap-4 px-4 py-3 rounded-xl bg-white/30 backdrop-blur-sm"
+                        className="flex items-center gap-4 px-4 py-3 rounded-full bg-white/30 backdrop-blur-sm"
                         whileHover={{ scale: 1.02 }}
                         transition={{
                           type: "spring",
@@ -467,7 +483,7 @@ const Navbar = () => {
 
                       <div className="grid grid-cols-2 gap-3 mt-4">
                         <motion.button
-                          className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-white/10 backdrop-blur-sm hover:bg-white/40 transition-all"
+                          className="flex items-center justify-center gap-2 px-4 py-3 rounded-full bg-white/10 backdrop-blur-sm hover:bg-white/40 transition-all"
                           whileHover={{ scale: 1.02, y: -1 }}
                           whileTap={{ scale: 0.98 }}
                         >
@@ -477,7 +493,7 @@ const Navbar = () => {
                           </span>
                         </motion.button>
                         <motion.button
-                          className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-white/10 backdrop-blur-sm hover:bg-white/40 transition-all"
+                          className="flex items-center justify-center gap-2 px-4 py-3 rounded-full bg-white/10 backdrop-blur-sm hover:bg-white/40 transition-all"
                           whileHover={{ scale: 1.02, y: -1 }}
                           whileTap={{ scale: 0.98 }}
                         >
@@ -491,7 +507,7 @@ const Navbar = () => {
                   <SignedOut>
                     <SignInButton mode="modal">
                       <motion.button
-                        className="w-full flex items-center justify-center gap-2 p-4 rounded-xl bg-white/10 backdrop-blur-sm hover:bg-white/30 transition-all"
+                        className="w-full flex items-center justify-center gap-2 p-4 rounded-full bg-white/10 backdrop-blur-sm hover:bg-white/30 transition-all"
                         whileHover={{ scale: 1.02, y: -1 }}
                         whileTap={{ scale: 0.98 }}
                       >
