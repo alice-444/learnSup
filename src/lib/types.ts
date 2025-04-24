@@ -18,6 +18,12 @@ export interface NavLinksProps {
   onClick?: () => void;
 }
 
+export interface IconButtonProps {
+  children: React.ReactNode;
+  onClick: () => void;
+  className?: string;
+}
+
 //page messages
 
 export interface FileAttachment {
@@ -94,3 +100,62 @@ export interface Conversation {
   typing?: boolean;
   messages: Message[];
 }
+
+//search page
+
+export interface Tutor {
+  id: number;
+  name: string;
+  level: string;
+  status: string;
+  ateliersGiven: number;
+  rating: number;
+  evaluations: number;
+  avatar: string;
+  online?: boolean;
+  atelier: {
+    title: string;
+    time: string;
+    participants: number;
+    isOnline?: boolean;
+  };
+}
+
+export interface SearchHeaderProps {
+  searchQuery: string;
+  onSearchChange: (value: string) => void;
+  totalResults: number;
+}
+
+export interface SearchFiltersProps {
+  selectedFilters: {
+    today: boolean;
+    level: string;
+    subject: string;
+    rating: boolean;
+  };
+  onFilterChange: (
+    key: keyof SearchFiltersProps["selectedFilters"],
+    value: boolean | string
+  ) => void;
+}
+
+export interface PaginationProps {
+  currentPage: number;
+  totalPages: number;
+  itemsPerPage: number;
+  totalItems: number;
+  onPageChange: (page: number) => void;
+}
+
+export interface TutorListProps {
+  tutors: Tutor[];
+  currentPage: number;
+  itemsPerPage: number;
+  onPageChange: (page: number) => void;
+}
+
+export interface TutorCardProps {
+  tutor: Tutor;
+}
+
