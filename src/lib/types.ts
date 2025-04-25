@@ -24,7 +24,7 @@ export interface IconButtonProps {
   className?: string;
 }
 
-//page messages
+//messages page
 
 export interface FileAttachment {
   id: number;
@@ -159,3 +159,21 @@ export interface TutorCardProps {
   tutor: Tutor;
 }
 
+//relations page
+
+export interface SearchBarProps {
+  searchQuery: string;
+  onSearchChange: (value: string) => void;
+  resultsCount: number;
+}
+
+export interface Relation {
+  id: number;
+  name: string;
+  commonRelations: number;
+  imageUrl: string;
+}
+
+export interface RelationCardProps {
+  relation: Relation;
+}
