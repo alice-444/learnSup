@@ -57,7 +57,7 @@ export const Pagination = ({
         transition={{ delay: 0.15 }}
       >
         Affichage de {Math.min(currentPage * itemsPerPage, totalItems)} sur{" "}
-        {totalItems} tuteurs
+        {totalItems} résultats
       </motion.div>
 
       <div className="flex items-center justify-center gap-2">
