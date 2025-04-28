@@ -38,7 +38,7 @@ const navItemsConnected: NavItem[] = [
   {
     name: "Ateliers",
     minWidth: 640,
-    path: "/ateliers",
+    path: "/workshops",
     icon: <FiBook className="w-5 h-5" />,
   },
   {
@@ -227,7 +227,7 @@ const Navbar = () => {
   return (
     <nav className="fixed top-0 w-full bg-[var(--secondary-blue)] z-50">
       <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between items-center h-20">
           <div className="flex items-center flex-1">
             <Link href="/" className="flex items-center">
               <Image
