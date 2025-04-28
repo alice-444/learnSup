@@ -177,3 +177,18 @@ export interface Relation {
 export interface RelationCardProps {
   relation: Relation;
 }
+//Workshops
+export interface WorkshopStrict {
+  id: number;
+  name: string;
+  avatar: string;
+  level: string;
+  status: string;
+  rating: number;
+  evaluations: number;
+  course: string;
+  time: string;
+  date: string;
+  description: string;
+  online: boolean;
+}

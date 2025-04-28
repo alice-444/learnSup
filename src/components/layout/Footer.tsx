@@ -9,12 +9,12 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   const navigationLinks = [
-    { name: "Accueil", href: "/" },
-    { name: "Ateliers", href: "/" },
-    { name: "Dashboard", href: "/" },
-    { name: "Messages", href: "/" },
-    { name: "Relations", href: "/" },
-    { name: "Profil", href: "/" },
+    { name: "Accueil", href: "/search" },
+    { name: "Ateliers", href: "//workshops" },
+    { name: "Dashboard", href: "/dashboard" },
+    { name: "Messages", href: "/messages" },
+    { name: "Relations", href: "/relations" },
+    { name: "Profil", href: "/profil" },
   ];
 
   const legalLinks = [
