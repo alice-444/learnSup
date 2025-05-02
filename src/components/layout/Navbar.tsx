@@ -85,9 +85,9 @@ const NavLink = ({
   const isActive = pathname === item.path;
 
   const baseClassDesktop =
-    "px-4 py-2 text-sm font-medium transition-colors relative";
+    "px-4 py-2 text-sm font-medium transition-colors relative flex items-center gap-2";
   const baseClassTablet =
-    "px-3 py-1.5 text-sm font-medium transition-colors relative";
+    "px-3 py-1.5 text-sm font-medium transition-colors relative flex items-center gap-2";
   const baseClassMobile =
     "w-full px-4 py-3.5 flex items-center gap-3 text-[15px] font-medium transition-all rounded-full hover:bg-white/35";
 
@@ -114,38 +114,29 @@ const NavLink = ({
           ${isActive ? activeClass : inactiveClass}
         `}
       >
-        {variant === "mobile" && (
-          <>
-            {item.icon}
-            <span>{item.name}</span>
-            {isActive && (
-              <motion.div
-                className="absolute inset-0 bg-white/10 rounded-full"
-                layoutId="activeBackgroundMobile"
-                transition={{
-                  type: "spring",
-                  stiffness: 200,
-                  damping: 20,
-                }}
-              />
-            )}
-          </>
+        {item.icon}
+        <span className="relative z-10">{item.name}</span>
+        {isActive && variant === "mobile" && (
+          <motion.div
+            className="absolute inset-0 bg-white/10 rounded-full"
+            layoutId="activeBackgroundMobile"
+            transition={{
+              type: "spring",
+              stiffness: 200,
+              damping: 20,
+            }}
+          />
         )}
-        {variant !== "mobile" && (
-          <>
-            <span className="relative z-10">{item.name}</span>
-            {isActive && (
-              <motion.div
-                className="absolute bottom-0 left-0 right-0 h-0.5 bg-white"
-                layoutId="activeIndicator"
-                transition={{
-                  type: "spring",
-                  stiffness: 400,
-                  damping: 25,
-                }}
-              />
-            )}
-          </>
+        {isActive && variant !== "mobile" && (
+          <motion.div
+            className="absolute bottom-0 left-0 right-0 h-0.5 bg-white"
+            layoutId="activeIndicator"
+            transition={{
+              type: "spring",
+              stiffness: 400,
+              damping: 25,
+            }}
+          />
         )}
       </Link>
     </motion.div>

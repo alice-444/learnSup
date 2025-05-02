@@ -6,7 +6,7 @@ export const mockConversations: Conversation[] = [
     name: "Johan Stirling",
     lastMessage: "Est en train d'écrire...",
     unread: 1,
-    avatar: "/avatars/johan.jpg",
+    avatar: "/profils/zoe.png",
     online: true,
     typing: true,
     messages: [
@@ -24,7 +24,7 @@ export const mockConversations: Conversation[] = [
     name: "Kalina Aufrey",
     lastMessage: "Top ! Merci beaucoup Maxime, à toi aussi :)",
     unread: 0,
-    avatar: "/avatars/kalina.jpg",
+    avatar: "/profils/zoe.png",
     online: false,
     messages: [
       {
@@ -65,7 +65,7 @@ export const mockConversations: Conversation[] = [
     name: "Marie Antoinette",
     lastMessage: "Je t'envoie mes cours ce soir",
     unread: 0,
-    avatar: "/avatars/marie.jpg",
+    avatar: "/profils/sarah.png",
     online: true,
     messages: [],
   },
