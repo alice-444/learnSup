@@ -14,6 +14,7 @@ export const mockTutors: Tutor[] = [
     atelier: {
       title: "UX Design",
       time: "9h30 - 10H00",
+      date: "12 juin 2024",
       participants: 13,
       isOnline: true,
     },
@@ -31,6 +32,7 @@ export const mockTutors: Tutor[] = [
     atelier: {
       title: "UX Design",
       time: "9h30 - 10H00",
+      date: "12 juin 2024",
       participants: 13,
       isOnline: true,
     },
@@ -48,6 +50,7 @@ export const mockTutors: Tutor[] = [
     atelier: {
       title: "UX Design",
       time: "9h30 - 10H00",
+      date: "12 juin 2024",
       participants: 13,
       isOnline: true,
     },
@@ -65,6 +68,7 @@ export const mockTutors: Tutor[] = [
     atelier: {
       title: "UX Design",
       time: "11h30 - 12H00",
+      date: "12 juin 2024",
       participants: 13,
     },
   },
@@ -81,6 +85,7 @@ export const mockTutors: Tutor[] = [
     atelier: {
       title: "UX Design",
       time: "11h30 - 12H30",
+      date: "12 juin 2024",
       participants: 13,
     },
   },
@@ -97,6 +102,7 @@ export const mockTutors: Tutor[] = [
     atelier: {
       title: "UX Design",
       time: "11h30 - 12H30",
+      date: "12 juin 2024",
       participants: 13,
     },
   },
@@ -113,6 +119,7 @@ export const mockTutors: Tutor[] = [
     atelier: {
       title: "UX Design",
       time: "14h30 - 15H00",
+      date: "12 juin 2024",
       participants: 13,
     },
   },
@@ -129,6 +136,7 @@ export const mockTutors: Tutor[] = [
     atelier: {
       title: "UX Design",
       time: "15h00 - 16H00",
+      date: "12 juin 2024",
       participants: 13,
     },
   },
