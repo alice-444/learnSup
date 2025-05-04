@@ -1,3 +1,4 @@
+import { ReactNode } from "react";
 //Navbar
 export interface NavItem {
   name: string;
@@ -114,6 +115,7 @@ export interface Tutor {
   avatar: string;
   online?: boolean;
   atelier: {
+    date: ReactNode;
     title: string;
     time: string;
     participants: number;

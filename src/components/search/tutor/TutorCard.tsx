@@ -1,9 +1,9 @@
 import Image from "next/image";
-import { TutorCardProps } from "@/lib/types";
+import { TutorCardProps, Tutor } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { FiStar, FiVideo } from "react-icons/fi";
 
-export const TutorCard = ({ tutor }: TutorCardProps) => {
+export const TutorCard = ({ tutor, onParticipate }: TutorCardProps & { onParticipate?: (tutor: Tutor) => void }) => {
   return (
     <div className="bg-[#1E1E1E]/80 backdrop-blur-md rounded-2xl overflow-hidden relative shadow-xl border border-white/10 hover:border-white/20 transition-all group">
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
@@ -82,6 +82,7 @@ export const TutorCard = ({ tutor }: TutorCardProps) => {
                   variant="default"
                   size="sm"
                   className="rounded-full h-8 px-3.5 bg-white hover:bg-white/95 text-[#3B82F6] font-medium whitespace-nowrap transition-all flex items-center gap-1.5 shadow-lg shadow-white/10"
+                  onClick={() => onParticipate && onParticipate(tutor)}
                 >
                   <span className="text-sm">Participer</span>
                   <FiVideo className="w-3.5 h-3.5" />

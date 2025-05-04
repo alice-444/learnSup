@@ -1,14 +1,15 @@
 import { motion } from "framer-motion";
 import { TutorCard } from "@/components/search/tutor/TutorCard";
 import { Pagination } from "@/components/search/Pagination";
-import { TutorListProps } from "@/lib/types";
+import { TutorListProps, Tutor } from "@/lib/types";
 
 export const TutorList = ({
   tutors,
   currentPage,
   itemsPerPage,
   onPageChange,
-}: TutorListProps) => {
+  onParticipate,
+}: TutorListProps & { onParticipate?: (tutor: Tutor) => void }) => {
   const totalPages = Math.ceil(tutors.length / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
   const currentTutors = tutors.slice(startIndex, startIndex + itemsPerPage);
@@ -16,7 +17,7 @@ export const TutorList = ({
   return (
     <div className="space-y-4">
       {currentTutors.map((tutor) => (
-        <TutorCard key={tutor.id} tutor={tutor} />
+        <TutorCard key={tutor.id} tutor={tutor} onParticipate={onParticipate} />
       ))}
 
       {tutors.length === 0 && (
